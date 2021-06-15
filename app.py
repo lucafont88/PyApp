@@ -1,19 +1,33 @@
 import streamlit as st
 from datetime import datetime
 import pandas as pd
-from streamlit_lib.track_focus import FocusTracker
+from streamlit_lib.track_text import TextTracker
 import time
 
 # Creating the Dashboard app #
-st.title("Focus Tracker")
+st.title("Text Tracker")
 
-focus_tracker = FocusTracker()
+text_tracker = TextTracker()
 
 df_focus, today = focus_tracker.create_focus_df()
 
-fig = focus_tracker.plotFocus(df_focus)
+# fig = focus_tracker.plotFocus(df_focus)
 
-st.write(fig)
+# st.write(fig)
+
+
+
+
+# # Creating the Dashboard app #
+# st.title("Focus Tracker")
+
+# focus_tracker = FocusTracker()
+
+# df_focus, today = focus_tracker.create_focus_df()
+
+# fig = focus_tracker.plotFocus(df_focus)
+
+# st.write(fig)
 
 
 
