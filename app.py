@@ -3,13 +3,20 @@ from datetime import datetime
 import pandas as pd
 from streamlit_lib.track_text import TextTracker
 import time
+from typing import List
+from keyboard import KeyboardEvent
 
-# Creating the Dashboard app #
 st.title("Text Tracker")
 
 text_tracker = TextTracker()
 
-df_focus, today = focus_tracker.create_focus_df()
+text_tracker.start_listening_keyboard()
+
+tracked_keys: List[KeyboardEvent] = text_tracker.get_tracked_key_events()
+
+tracked_keys_name = map(lambda k: k.name, tracked_keys)
+
+st.write(list(tracked_keys_name))
 
 # fig = focus_tracker.plotFocus(df_focus)
 
