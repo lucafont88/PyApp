@@ -12,11 +12,13 @@ text_tracker = TextTracker()
 
 text_tracker.start_listening_keyboard()
 
-tracked_keys: List[KeyboardEvent] = text_tracker.get_tracked_key_events()
+# tracked_keys: List[KeyboardEvent] = text_tracker.get_tracked_key_events()
 
-tracked_keys_name = map(lambda k: k.name, tracked_keys)
+# tracked_keys_name = map(lambda k: k.name, tracked_keys)
 
-st.write(list(tracked_keys_name))
+tracked_data_df = text_tracker.get_tracked_key_events_df()
+
+st.write(tracked_data_df)
 
 # fig = focus_tracker.plotFocus(df_focus)
 
