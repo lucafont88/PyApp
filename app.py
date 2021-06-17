@@ -6,19 +6,28 @@ import time
 from typing import List
 from keyboard import KeyboardEvent
 
+_is_running = False
+_any_run = False
+
 st.title("Text Tracker")
 
 text_tracker = TextTracker()
+tracked_data_df: pd.DataFrame = {}
 
-text_tracker.start_listening_keyboard()
+if _is_running == True and st.button("Stop"):
+    text_tracker.stop_listening_keyboard()
+    tracked_data_df = text_tracker.get_tracked_key_events_df()
+    _is_running = False
 
-# tracked_keys: List[KeyboardEvent] = text_tracker.get_tracked_key_events()
-
-# tracked_keys_name = map(lambda k: k.name, tracked_keys)
-
-tracked_data_df = text_tracker.get_tracked_key_events_df()
-
-st.write(tracked_data_df)
+if _is_running == False and st.button("Start"):
+    _any_run = True
+    _is_running = True
+    text_tracker.start_listening_keyboard()
+    
+if _any_run == True:
+    st.write(tracked_data_df)
+# else:
+#     st.write("No Data")
 
 # fig = focus_tracker.plotFocus(df_focus)
 

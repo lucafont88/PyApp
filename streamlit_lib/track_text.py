@@ -19,6 +19,8 @@ class TextTracker:
         # Record events until 'esc' is pressed.
         self.key_event_tracked = keyboard.record(until='esc')
 
+    def stop_listening_keyboard(self):
+        keyboard.send(hotkey='esc')
     # def stop_listening_keyboard(self):
     #     keyboard.unhook_all()
 
