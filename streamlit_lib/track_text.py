@@ -1,4 +1,5 @@
 
+from queue import Queue
 import keyboard
 import pandas as pd
 import pathlib
@@ -20,7 +21,8 @@ class TextTracker:
     def start_listening_keyboard(data_storage = "./focus.txt"):
         #keyboard.on_release(lambda k:self.text_tracked.append(k))
         # Record events until 'esc' is pressed.
-        key_event_tracked = keyboard.record(until='esc')
+        # key_event_tracked = keyboard.record(until='esc')
+        key_event_tracked = keyboard.start_recording()
         key_event_tracked_df = TextTracker._get_tracked_key_events_df(key_event_tracked)
         key_event_tracked_df.to_csv(data_storage)
         # keyboard.start_recording()
@@ -37,11 +39,11 @@ class TextTracker:
             'key_time': []
         })
 
-    def stop_listening_keyboard():
-        keyboard.send(hotkey='esc')
+    # def stop_listening_keyboard():
+    #     keyboard.send(hotkey='esc')
 
-    # def stop_listening_keyboard(self):
-    #     keyboard.unhook_all()
+    def stop_listening_keyboard():
+        keyboard.unhook_all()
 
 
     def _get_tracked_key_events_df(key_event_tracked) -> pd.DataFrame:

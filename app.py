@@ -13,11 +13,11 @@ _signal_start = st.button("Start")
 
 st.write("Results:")
 
-if _signal_stop == True:
-    TextTracker.stop_listening_keyboard()
-
 if _signal_start == True:
     TextTracker.start_listening_keyboard()
+
+if _signal_stop == True:
+    TextTracker.stop_listening_keyboard()
 
 try:
     tracked_data_df = TextTracker.load_keyboard_events_tracked_df()
