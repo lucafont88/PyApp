@@ -18,13 +18,10 @@ class TextTracker:
                 focus.write(f"{start} {end}")
                 focus.write("\n")
 
+    _key_event_tracked = []
     def start_listening_keyboard(data_storage = "./focus.txt"):
-        #keyboard.on_release(lambda k:self.text_tracked.append(k))
         # Record events until 'esc' is pressed.
-        # key_event_tracked = keyboard.record(until='esc')
-        key_event_tracked = keyboard.start_recording()
-        key_event_tracked_df = TextTracker._get_tracked_key_events_df(key_event_tracked)
-        key_event_tracked_df.to_csv(data_storage)
+        keyboard.on_release(lambda k: TextTracker._key_event_tracked.append(k))
         # keyboard.start_recording()
 
     def load_keyboard_events_tracked_df(data_storage = "./focus.txt"):
@@ -39,11 +36,14 @@ class TextTracker:
             'key_time': []
         })
 
-    # def stop_listening_keyboard():
-    #     keyboard.send(hotkey='esc')
-
-    def stop_listening_keyboard():
+    def stop_listening_keyboard(data_storage = "./focus.txt"):
+        # keyboard.send(hotkey='esc')
         keyboard.unhook_all()
+        key_event_tracked_df = TextTracker._get_tracked_key_events_df(TextTracker._key_event_tracked)
+        key_event_tracked_df.to_csv(data_storage)
+
+    # def stop_listening_keyboard():
+    #     keyboard.unhook_all()
 
 
     def _get_tracked_key_events_df(key_event_tracked) -> pd.DataFrame:

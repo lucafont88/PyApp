@@ -3,6 +3,7 @@ from datetime import datetime
 import pandas as pd
 from streamlit_lib.track_text import TextTracker
 import time
+import keyboard
 
 st.title("Text Tracker")
 
@@ -25,6 +26,9 @@ except:
     tracked_data_df = TextTracker.get_empty_keyboard_events_tracked_df()
 
 st.write(tracked_data_df)
+
+
+# keyboard.wait('esc')
 
 
 
