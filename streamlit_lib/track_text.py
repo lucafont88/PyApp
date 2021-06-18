@@ -1,5 +1,6 @@
 
 from queue import Queue
+from streamlit_lib.key_digest import KeyDigest
 from streamlit_lib.app_settings import AppSettings
 import keyboard
 import pandas as pd
@@ -31,9 +32,9 @@ class TextTracker:
 
     _key_event_tracked = []
     def start_listening_keyboard():
-        keyboard.on_release(lambda k: TextTracker._digest_keys_events(k))
+        keyboard.on_release(lambda k: TextTracker._handle_key_event(k))
 
-    def _digest_keys_events(key):
+    def _handle_key_event(key):
         TextTracker._key_event_tracked.append(key)
 
     def load_keyboard_events_tracked_df():
@@ -49,23 +50,11 @@ class TextTracker:
             'key_time': []
         })
 
-    def stop_listening_keyboard(data_storage = "./focus.txt"):
-        # keyboard.send(hotkey='esc')
+    def stop_listening_keyboard():
+        app_settings = TextTracker._get_app_settings()
+        data_storage = app_settings.tracking_file_name
         keyboard.unhook_all()
-        key_event_tracked_df = TextTracker._get_tracked_key_events_df(TextTracker._key_event_tracked)
+        key_digest = KeyDigest(app_settings)
+        key_digest.digest_session(TextTracker._key_event_tracked)
+        key_event_tracked_df = key_digest.digest_session(TextTracker._key_event_tracked)
         key_event_tracked_df.to_csv(data_storage)
-
-    # def stop_listening_keyboard():
-    #     keyboard.unhook_all()
-
-
-    def _get_tracked_key_events_df(key_event_tracked) -> pd.DataFrame:
-        _tracked_keys_names = list(map(lambda k: k.name, key_event_tracked))
-        _tracked_keys_codes = list(map(lambda k: k.scan_code, key_event_tracked))
-        _tracked_keys_times = list(map(lambda k: k.time, key_event_tracked))
-
-        return pd.DataFrame({
-            'key_names': _tracked_keys_names,
-            'key_codes': _tracked_keys_codes,
-            'key_time': _tracked_keys_times
-        })

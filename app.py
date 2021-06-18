@@ -9,6 +9,7 @@ import keyboard
 TRACKING_FILE_NAME = "./focus.txt"
 
 app_settings = AppSettings(TRACKING_FILE_NAME)
+TextTracker.set_app_settings(app_settings)
 
 st.title("Text Tracker")
 
