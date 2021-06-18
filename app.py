@@ -2,8 +2,13 @@ import streamlit as st
 from datetime import datetime
 import pandas as pd
 from streamlit_lib.track_text import TextTracker
+from streamlit_lib.app_settings import AppSettings
 import time
 import keyboard
+
+TRACKING_FILE_NAME = "./focus.txt"
+
+app_settings = AppSettings(TRACKING_FILE_NAME)
 
 st.title("Text Tracker")
 
