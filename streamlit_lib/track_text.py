@@ -1,10 +1,10 @@
 
-from queue import Queue
 from streamlit_lib.key_digest import KeyDigest
 from streamlit_lib.app_settings import AppSettings
 import keyboard
 import pandas as pd
 import pathlib
+from typing import List
 
 
 class TextTracker:
@@ -30,12 +30,12 @@ class TextTracker:
         return TextTracker._app_settings
 
 
-    _key_event_tracked = []
+    _key_event_tracked: List[keyboard.KeyboardEvent] = []
     def start_listening_keyboard():
         keyboard.on_release(lambda k: TextTracker._handle_key_event(k))
 
-    def _handle_key_event(key):
-        TextTracker._key_event_tracked.append(key)
+    def _handle_key_event(key_event: keyboard.KeyboardEvent):
+        TextTracker._key_event_tracked.append(key_event)
 
     def load_keyboard_events_tracked_df():
         data_storage = TextTracker._app_settings.tracking_file_name
