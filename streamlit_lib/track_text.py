@@ -6,7 +6,6 @@ import pandas as pd
 import pathlib
 from typing import List
 
-
 class TextTracker:
 
     # Potrebbe essere inutile   
@@ -31,30 +30,39 @@ class TextTracker:
 
 
     _key_event_tracked: List[keyboard.KeyboardEvent] = []
-    def start_listening_keyboard():
+    def start_listening_keyboard() -> None:
         keyboard.on_release(lambda k: TextTracker._handle_key_event(k))
 
-    def _handle_key_event(key_event: keyboard.KeyboardEvent):
+    def _handle_key_event(key_event: keyboard.KeyboardEvent) -> None:
         TextTracker._key_event_tracked.append(key_event)
 
-    def load_keyboard_events_tracked_df():
+    def load_keyboard_events_tracked_df() -> pd.DataFrame:
         data_storage = TextTracker._app_settings.tracking_file_name
         path = pathlib.Path(data_storage)
         if path.exists() and path.is_file():
             return pd.read_csv(data_storage) 
     
-    def get_empty_keyboard_events_tracked_df():
-                return pd.DataFrame({
-            'key_names': [],
-            'key_codes': [],
-            'key_time': []
-        })
+    def load_parsed_strings_df() -> pd.DataFrame:
+        euristisc_string_storage = TextTracker._app_settings.parsed_string_file_name
+        path = pathlib.Path(euristisc_string_storage)
+        if path.exists() and path.is_file():
+            return pd.read_csv(euristisc_string_storage) 
+    
+    def get_empty_keyboard_events_tracked_df() -> pd.DataFrame:
+        app_settings = TextTracker._get_app_settings()
+        return KeyDigest(app_settings).get_empty_keyboard_events_tracked_df()
+    
+    def get_empty_string_tracked_df() -> pd.DataFrame:
+        app_settings = TextTracker._get_app_settings()
+        return KeyDigest(app_settings).get_empty_string_tracked_df()
 
-    def stop_listening_keyboard():
+    def stop_listening_keyboard() -> None:
         app_settings = TextTracker._get_app_settings()
         data_storage = app_settings.tracking_file_name
+        euristisc_string_storage = app_settings.parsed_string_file_name
         keyboard.unhook_all()
         key_digest = KeyDigest(app_settings)
-        key_digest.digest_session(TextTracker._key_event_tracked)
         key_event_tracked_df = key_digest.digest_session(TextTracker._key_event_tracked)
         key_event_tracked_df.to_csv(data_storage)
+        string_tracked_df = key_digest.euristics_string_parser(TextTracker._key_event_tracked)
+        string_tracked_df.to_csv(euristisc_string_storage)
