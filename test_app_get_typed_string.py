@@ -1,7 +1,9 @@
+from streamlit_lib.app_settings import AppSettings
+from streamlit_lib.key_digest import KeyDigest
+from streamlit_lib.track_text import TextTracker
 import keyboard
 
 def key_pressed_generator(key_pressed: list):
-    print("Tasti premuti:")
     for k in key_pressed:
         print(k)
         yield k
@@ -17,19 +19,25 @@ keyboard.on_release(lambda k: key_pressed.append(k))
 
 print("listening...")
 
-result = keyboard.get_typed_strings(generate_events(), allow_backspace=True)
-
 keyboard.wait('esc')
 print("stop listening")
+print("---- Keys ------")
+print(key_pressed)
 
-print("Parsed strings:")
-#print("DIR strings:")
-# print (result)
-# val = next(result)
-# print(val)
-while True:
-        s = next(result)
-        print(str(s))
+TRACKING_FILE_NAME = "./focus.txt"
+PARSED_STRING_FILE_NAME = "./euristic_string.txt"
 
+app_settings = AppSettings(TRACKING_FILE_NAME, PARSED_STRING_FILE_NAME)
 
+TextTracker.set_app_settings(app_settings)
+
+key_digest = KeyDigest(app_settings)
+
+result = TextTracker.load_parsed_strings_df() # key_digest.try_get_strings(key_pressed)
+
+print("----Parsed strings:----")
+
+print (result)
+
+print("  *-*-*-*-*-*-*-*-*- ")
 print("End")

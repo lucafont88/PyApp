@@ -14,9 +14,6 @@ app_settings = AppSettings(TRACKING_FILE_NAME, PARSED_STRING_FILE_NAME)
 TextTracker.set_app_settings(app_settings)
 
 st.title("Text Tracker")
-
-tracked_data_df: pd.DataFrame = {}
-tracked_sring_df: pd.DataFrame = {}
  
 _signal_stop = st.button("Stop")
 _signal_start = st.button("Start")
@@ -37,10 +34,10 @@ except:
 try:
     tracked_string_df = TextTracker.load_parsed_strings_df()
 except:
-    tracked_sring_df = TextTracker.get_empty_string_tracked_df()
+    tracked_string_df = TextTracker.get_empty_string_tracked_df()
 
-st.write(tracked_data_df)
-st.write(tracked_sring_df)
+st.dataframe(tracked_data_df)
+st.dataframe(tracked_string_df)
 
 # keyboard.wait('esc')
 
